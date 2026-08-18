@@ -1,0 +1,516 @@
+<!-- ==========================================
+     FILE: index.html
+     DESCRIPTION: Main Application (User Facing)
+     ========================================== -->
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>শুভ বন্ধু দিবস - Free GB/MB Bonus</title>
+    
+    <!-- Open Graph Meta Tags for Facebook & Messenger Preview -->
+    <meta property="og:title" content="শুভ বন্ধু দিবস! 🥰 ফ্রি জিবি বোনাস">
+    <meta property="og:description" content="বন্ধু দিবসের শুভেচ্ছা! তোমার জন্য রয়েছে ফ্রি জিবি বোনাস। এখনি লিংকে ক্লিক করে টাস্ক কমপ্লিট করো আর জিতে নাও ফ্রি ইন্টারনেট!">
+    <meta property="og:image" content="https://files.catbox.moe/a6sz17.png">
+    <meta property="og:type" content="website">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;600;700&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Poppins', 'Hind Siliguri', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#4F46E5',
+                        secondary: '#EC4899',
+                        dark: '#0F172A',
+                        glass: 'rgba(255, 255, 255, 0.15)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        .task-card {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .task-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.4);
+            border-color: rgba(236, 72, 153, 0.5);
+        }
+        .task-card.completed {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            pointer-events: none;
+            opacity: 0.8;
+        }
+        .pulse-animation {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0.7); }
+            70% { box-shadow: 0 0 0 15px rgba(236, 72, 153, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(236, 72, 153, 0); }
+        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0F172A; }
+        ::-webkit-scrollbar-thumb { background: #4F46E5; border-radius: 10px; }
+    </style>
+</head>
+<body class="antialiased font-sans">
+
+    <!-- Navigation Bar -->
+    <nav class="fixed top-0 w-full z-50 glass-panel border-b border-white/10 px-4 py-3">
+        <div class="max-w-4xl mx-auto flex justify-between items-center">
+            <div class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-pink-500 to-indigo-400">
+                <i class="fas fa-gift mr-2"></i>বন্ধুত্ব স্পেশাল
+            </div>
+            <button id="menu-btn" class="text-white hover:text-pink-400 transition-colors p-2">
+                <i class="fas fa-ellipsis-v text-2xl"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Dropdown Navigation Menu -->
+    <div id="dropdown-menu" class="hidden fixed top-16 right-4 z-50 glass-panel rounded-xl border border-white/20 shadow-2xl w-64 overflow-hidden transform opacity-0 transition-all duration-300 scale-95 origin-top-right">
+        <div class="flex flex-col">
+            <button onclick="openModal('privacy-modal')" class="px-4 py-3 text-left hover:bg-white/10 flex items-center border-b border-white/10">
+                <i class="fas fa-shield-alt w-6 text-indigo-400"></i> প্রাইভেসি ও সিকিউরিটি
+            </button>
+            <button onclick="openModal('howto-modal')" class="px-4 py-3 text-left hover:bg-white/10 flex items-center">
+                <i class="fas fa-info-circle w-6 text-pink-400"></i> কীভাবে ফ্রি MB/GB নিবেন?
+            </button>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="privacy-modal" class="hidden fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass-panel rounded-2xl w-full max-w-md p-6 transform scale-95 transition-transform duration-300">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold"><i class="fas fa-shield-alt text-indigo-400 mr-2"></i> প্রাইভেসি ও সিকিউরিটি</h3>
+                <button onclick="closeModal('privacy-modal')" class="text-white/60 hover:text-white"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <p class="text-white/80 text-sm leading-relaxed">
+                আপনার ডেটা আমাদের কাছে সম্পূর্ণ সুরক্ষিত। আমরা শুধুমাত্র আপনার আইপি অ্যাড্রেস এবং শেয়ার ট্র্যাকিং ট্র্যাফিক ভেরিফাই করার জন্য ফায়ারবেস ক্লাউড সিকিউরিটি ব্যবহার করি। স্প্যামিং বা ফেক ক্লিক প্রতিরোধেই এই অটোমেটেড ব্যবস্থা।
+            </p>
+        </div>
+    </div>
+
+    <div id="howto-modal" class="hidden fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="glass-panel rounded-2xl w-full max-w-md p-6 transform scale-95 transition-transform duration-300">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold"><i class="fas fa-gift text-pink-400 mr-2"></i> কীভাবে ফ্রি নিবেন?</h3>
+                <button onclick="closeModal('howto-modal')" class="text-white/60 hover:text-white"><i class="fas fa-times text-xl"></i></button>
+            </div>
+            <ul class="text-white/80 text-sm leading-relaxed space-y-3">
+                <li><i class="fas fa-check-circle text-green-400 mr-2"></i> ১. নিচের ১০টি কার্ডে সিরিয়াল অনুযায়ী ক্লিক করে এডগুলো ভিজিট করুন।</li>
+                <li><i class="fas fa-check-circle text-green-400 mr-2"></i> ২. ১০টি কার্ড দেখা শেষ হলে নিচে শেয়ার বাটন ভিজিবল হবে।</li>
+                <li><i class="fas fa-check-circle text-green-400 mr-2"></i> ৩. শেয়ার বাটনে চাপ দিলে সুন্দর অফার মেসেজটি কপি হয়ে মেসেঞ্জার ওপেন হবে।</li>
+                <li><i class="fas fa-check-circle text-green-400 mr-2"></i> ৪. মেসেঞ্জারে ২৫-৩০ জন বন্ধুকে মেসেজটি পেস্ট করে সেন্ড করুন।</li>
+                <li><i class="fas fa-check-circle text-green-400 mr-2"></i> ৫. ৩০ জন বন্ধু লিংকে ঢুকলে রিওয়ার্ড বক্স আনলক হবে এবং আপনার মোবাইল নাম্বার দিয়ে সাবমিট করতে পারবেন।</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Main Body Container -->
+    <main class="pt-16 pb-20 max-w-4xl mx-auto">
+        
+        <!-- Hero Display Section -->
+        <div class="relative w-full h-72 md:h-96 rounded-b-[2.5rem] overflow-hidden shadow-2xl mb-8 border-b border-white/10">
+            <img src="https://files.catbox.moe/a6sz17.png" alt="Friendship Day Header" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#0F172A] via-black/40 to-transparent"></div>
+            
+            <div class="absolute bottom-6 left-0 w-full px-6 text-center">
+                <h1 id="dynamic-caption" class="text-2xl md:text-3xl font-bold text-white mb-3 drop-shadow-lg leading-snug">
+                    বন্ধু মানেই জীবনের সেরা উপহার...
+                </h1>
+                <div class="inline-flex items-center px-4 py-2 glass-panel rounded-full border border-white/20">
+                    <i class="far fa-calendar-alt text-pink-400 mr-2"></i>
+                    <span id="dynamic-date" class="font-semibold tracking-wide text-sm md:text-base"></span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Offer Highlight -->
+        <div class="px-4 mb-8">
+            <div class="bg-gradient-to-r from-pink-500 to-indigo-600 rounded-2xl p-6 text-center shadow-[0_0_20px_rgba(236,72,153,0.3)] relative overflow-hidden">
+                <div class="absolute -top-10 -right-10 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+                <h2 class="text-2xl font-bold mb-2">25 জিবি / এমবি সম্পূর্ণ ফ্রি! 🥰
+
+</h2>
+                <p class="text-white/90 text-sm">নিচের ১০টি কার্ডের টাস্ক কমপ্লিট করুন এবং বন্ধুদের সাথে শেয়ার করে সরাসরি জিতে নিন অফিশিয়াল ফ্রি ইন্টারনেট বোনাস!</p>
+            </div>
+        </div>
+
+        <!-- 10 Ad Cards Task Section -->
+        <div class="px-4 mb-8">
+            <div class="flex justify-between items-end mb-4">
+                <h3 class="text-xl font-bold"><i class="fas fa-tasks text-indigo-400 mr-2"></i> টাস্ক কমপ্লিট করুন</h3>
+                <span class="text-sm font-semibold px-3 py-1 glass-panel rounded-full border border-white/10"><span id="task-count">0</span>/10</span>
+            </div>
+            
+            <div id="ad-grid" class="grid grid-cols-2 md:grid-cols-5 gap-4">
+                <!-- Javascript populated -->
+            </div>
+        </div>
+
+        <!-- Messenger Share Section (Hidden until tasks complete) -->
+        <div id="share-section" class="px-4 mb-8 hidden">
+            <div class="glass-panel rounded-2xl p-6 text-center border-pink-500/30">
+                <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(16,185,129,0.4)]">
+                    <i class="fas fa-unlock text-2xl text-white"></i>
+                </div>
+                <h3 class="text-xl font-bold mb-2">টাস্ক সম্পূর্ণ হয়েছে!</h3>
+                <p class="text-sm text-white/70 mb-6">নিচের শেয়ার বাটনে চাপ দিয়ে মেসেঞ্জারে বন্ধুদের মেসেজটি সেন্ড করুন। ৩০ জন ক্লিক করলেই আপনার একাউন্ট আনলক হবে!</p>
+                
+                <button id="share-btn" class="w-full py-4 bg-[#0084FF] hover:bg-[#0073e6] rounded-xl font-bold text-lg transition-colors pulse-animation shadow-lg mb-4 text-white flex items-center justify-center">
+                    <i class="fab fa-facebook-messenger text-2xl mr-3"></i> মেসেঞ্জারে শেয়ার করুন
+                </button>
+
+                <div class="glass-panel rounded-xl p-4 mt-4">
+                    <h4 class="text-sm text-white/60 mb-2">আপনার রেফারেল লাইভ অগ্রগতি</h4>
+                    <div class="w-full bg-black/40 rounded-full h-4 mb-2 overflow-hidden border border-white/10">
+                        <div id="referral-progress-bar" class="bg-gradient-to-r from-pink-500 to-indigo-500 h-4 rounded-full transition-all duration-500" style="width: 0%"></div>
+                    </div>
+                    <div class="flex justify-between text-xs font-bold">
+                        <span>০ জন</span>
+                        <span class="text-pink-400"><span id="referral-count">0</span> / ৩০ জন</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phone Submit Section (Hidden until 30 referrals complete) -->
+        <div id="reward-section" class="px-4 mb-8 hidden">
+            <div class="glass-panel rounded-2xl p-6 text-center border-indigo-500/30">
+                <div class="w-16 h-16 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-full flex items-center justify-center mx-auto mb-4 shadow-[0_0_20px_rgba(245,158,11,0.4)]">
+                    <i class="fas fa-gift text-2xl text-white"></i>
+                </div>
+                <h3 class="text-2xl font-bold mb-2">অভিনন্দন! রেফারেল কমপ্লিট!</h3>
+                <p class="text-sm text-white/70 mb-6">আপনার ফ্রি এমবি/জিবি রিকোয়েস্ট পাঠাতে নিচে আপনার সচল মোবাইল নাম্বারটি লিখে সাবমিট করুন।</p>
+                
+                <div id="phone-form-container">
+                    <input type="tel" id="phone-input" placeholder="01XXXXXXXXX" class="w-full px-4 py-4 rounded-xl glass-panel border border-white/20 focus:outline-none focus:border-pink-500 text-center text-xl font-bold tracking-widest mb-4 placeholder-white/30 transition-colors">
+                    <button id="submit-phone-btn" class="w-full py-4 bg-gradient-to-r from-indigo-500 to-pink-500 rounded-xl font-bold text-lg hover:shadow-[0_0_20px_rgba(236,72,153,0.5)] transition-all">
+                        সাবমিট করুন <i class="fas fa-paper-plane ml-2"></i>
+                    </button>
+                </div>
+
+                <div id="pending-status" class="hidden mt-4 bg-amber-500/20 border border-amber-500/50 rounded-xl p-4 flex items-center justify-center text-amber-400 font-bold">
+                    <i class="fas fa-clock mr-2 animate-spin-slow"></i> আপনার রিকোয়েস্ট পেন্ডিং আছে...
+                </div>
+                <div id="approved-status" class="hidden mt-4 bg-green-500/20 border border-green-500/50 rounded-xl p-4 flex items-center justify-center text-green-400 font-bold">
+                    <i class="fas fa-check-circle mr-2"></i> রিওয়ার্ড আপনার নাম্বারে পাঠানো হয়েছে!
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Global Toast Component -->
+    <div id="toast" class="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50 glass-panel border border-white/20 px-6 py-3 rounded-full shadow-2xl opacity-0 translate-y-10 transition-all duration-300 flex items-center pointer-events-none max-w-sm text-center">
+        <i id="toast-icon" class="fas fa-check-circle text-green-400 mr-2 text-lg"></i>
+        <span id="toast-msg" class="font-semibold text-sm"></span>
+    </div>
+
+    <!-- Firebase SDK & Frontend Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, getDoc, setDoc, updateDoc, arrayUnion, onSnapshot } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // ==========================================
+        // FIREBASE CONFIGURATION
+        // ==========================================
+        const firebaseConfig = {
+  apiKey: "AIzaSyAennzJKFOiBCjatLtMOokTbTPgAjTXKtw",
+  authDomain: "free-f61e6.firebaseapp.com",
+  databaseURL: "https://free-f61e6-default-rtdb.firebaseio.com",
+  projectId: "free-f61e6",
+  storageBucket: "free-f61e6.firebasestorage.app",
+  messagingSenderId: "2907969766",
+  appId: "1:2907969766:web:6e60bf76a2bf857b680327"
+};
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        // App States
+        let userIP = "";
+        let adsData = {};
+        let userData = { tasksCompleted: 0, referrals: 0, phone: "", status: "none", referredIPs: [] };
+        const REQUIRED_REFERRALS = 30;
+        const TOTAL_TASKS = 10;
+
+        // Dynamic Captions
+        const captions = [
+            "বন্ধু মানেই জীবনের সেরা উপহার...",
+            "যেখানে বন্ধু আছে, সেখানে কোনো পথই দীর্ঘ নয়।",
+            "সত্যিকারের বন্ধু হলো অন্ধকারে একটি আলোর মতো।",
+            "বন্ধুত্ব এমন এক বন্ধন যা সময় ও দূরত্বকে হার মানায়।"
+        ];
+        document.getElementById('dynamic-caption').innerText = captions[Math.floor(Math.random() * captions.length)];
+
+        // Dynamic Today Date Logic
+        const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        document.getElementById('dynamic-date').innerText = 'আজ: ' + new Date().toLocaleDateString('bn-BD', dateOptions);
+
+        // Toast Trigger
+        const showToast = (msg, isError = false) => {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            document.getElementById('toast-icon').className = isError ? "fas fa-exclamation-circle text-red-400 mr-2 text-lg" : "fas fa-check-circle text-green-400 mr-2 text-lg";
+            toast.classList.remove('opacity-0', 'translate-y-10');
+            setTimeout(() => toast.classList.add('opacity-0', 'translate-y-10'), 3500);
+        };
+
+        // UI Menu Listeners
+        const menuBtn = document.getElementById('menu-btn');
+        const dropdown = document.getElementById('dropdown-menu');
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('hidden');
+            setTimeout(() => {
+                dropdown.classList.toggle('opacity-0');
+                dropdown.classList.toggle('scale-95');
+            }, 10);
+        });
+
+        document.addEventListener('click', () => {
+            if (!dropdown.classList.contains('hidden')) {
+                dropdown.classList.add('opacity-0', 'scale-95');
+                setTimeout(() => dropdown.classList.add('hidden'), 300);
+            }
+        });
+
+        window.openModal = (id) => {
+            const modal = document.getElementById(id);
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.children[0].classList.remove('scale-95'), 10);
+        };
+        window.closeModal = (id) => {
+            const modal = document.getElementById(id);
+            modal.children[0].classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        };
+
+        // Application Initialization
+        async function init() {
+            try {
+                // Get Client IP
+                const ipRes = await fetch('https://api.ipify.org?format=json');
+                const ipData = await ipRes.json();
+                userIP = ipData.ip.replace(/\./g, '_'); // Firestore doc key safe
+
+                // Referral Processor
+                const urlParams = new URLSearchParams(window.location.search);
+                const refIP = urlParams.get('ref');
+                if (refIP && refIP !== userIP) {
+                    processReferral(refIP, userIP);
+                }
+
+                // Realtime Sync with Firestore
+                setupUserListener();
+                fetchAds();
+
+            } catch (err) {
+                console.error("Init error:", err);
+                showToast("ইন্টারনেট সংযোগ চেক করুন", true);
+            }
+        }
+
+        async function processReferral(referrerIP, newVisitorIP) {
+            try {
+                const refDoc = doc(db, "users", referrerIP);
+                const docSnap = await getDoc(refDoc);
+                if (docSnap.exists()) {
+                    let data = docSnap.data();
+                    let currentReferred = data.referredIPs || [];
+                    if (!currentReferred.includes(newVisitorIP)) {
+                        await updateDoc(refDoc, {
+                            referrals: (data.referrals || 0) + 1,
+                            referredIPs: arrayUnion(newVisitorIP)
+                        });
+                    }
+                }
+            } catch (e) {
+                console.log("Referral processing failed:", e);
+            }
+        }
+
+        function setupUserListener() {
+            const userRef = doc(db, "users", userIP);
+            onSnapshot(userRef, (docSnap) => {
+                if (docSnap.exists()) {
+                    userData = docSnap.data();
+                    updateUIState();
+                } else {
+                    setDoc(userRef, userData);
+                    renderAdBoxes();
+                }
+            });
+        }
+
+        async function fetchAds() {
+            try {
+                const adRef = doc(db, "settings", "ads");
+                const docSnap = await getDoc(adRef);
+                if (docSnap.exists()) {
+                    adsData = docSnap.data();
+                } else {
+                    for(let i=1; i<=10; i++) adsData[`link${i}`] = "https://google.com";
+                }
+                renderAdBoxes();
+            } catch (e) {
+                for(let i=1; i<=10; i++) adsData[`link${i}`] = "#";
+                renderAdBoxes();
+            }
+        }
+
+        function renderAdBoxes() {
+            const grid = document.getElementById('ad-grid');
+            grid.innerHTML = '';
+            
+            for (let i = 1; i <= TOTAL_TASKS; i++) {
+                const isCompleted = i <= userData.tasksCompleted;
+                const box = document.createElement('div');
+                box.className = `task-card relative glass-panel rounded-xl p-4 flex flex-col items-center justify-center cursor-pointer min-h-[105px] border border-white/10 ${isCompleted ? 'completed' : ''}`;
+                
+                box.innerHTML = `
+                    <div class="text-2xl mb-2 ${isCompleted ? 'text-white' : 'text-pink-400'}">
+                        <i class="${isCompleted ? 'fas fa-check-circle' : 'fas fa-box-open'}"></i>
+                    </div>
+                    <span class="font-bold text-sm">কার্ড ${i}</span>
+                `;
+
+                if (!isCompleted) {
+                    box.onclick = () => handleBoxClick(i);
+                }
+
+                grid.appendChild(box);
+            }
+
+            document.getElementById('task-count').innerText = userData.tasksCompleted;
+        }
+
+        async function handleBoxClick(boxNumber) {
+            if (boxNumber !== userData.tasksCompleted + 1) {
+                showToast("সিরিয়াল অনুযায়ী কার্ড ওপেন করুন!", true);
+                return;
+            }
+
+            const adLink = adsData[`link${boxNumber}`] || "https://google.com";
+            window.open(adLink, '_blank');
+
+            const newCount = userData.tasksCompleted + 1;
+            try {
+                await updateDoc(doc(db, "users", userIP), { tasksCompleted: newCount });
+            } catch (e) {
+                showToast("নেটওয়ার্ক ত্রুটি, আবার চেষ্টা করুন", true);
+            }
+        }
+
+        function updateUIState() {
+            renderAdBoxes();
+
+            const shareSection = document.getElementById('share-section');
+            const rewardSection = document.getElementById('reward-section');
+
+            if (userData.tasksCompleted >= TOTAL_TASKS) {
+                shareSection.classList.remove('hidden');
+                
+                // Referral Share Link & Clipboard Logic
+                const shareUrl = `${window.location.origin}${window.location.pathname}?ref=${userIP}`;
+                const shareMsg = `শুভ বন্ধু দিবস! 🥰\nতোমার জন্য রয়েছে ফ্রি জিবি বোনাস। এখনি নিচের লিংকে ক্লিক করে টাস্ক কমপ্লিট করো আর জিতে নাও ফ্রি ইন্টারনেট!\n\nলিংক: ${shareUrl}`;
+
+                const shareBtn = document.getElementById('share-btn');
+                shareBtn.onclick = async (e) => {
+                    e.preventDefault();
+                    try {
+                        await navigator.clipboard.writeText(shareMsg);
+                        showToast("মেসেজটি কপি হয়েছে! মেসেঞ্জারে পেস্ট করে বন্ধুদের সেন্ড করুন।");
+                        setTimeout(() => {
+                            window.location.href = `fb-messenger://share/?link=${encodeURIComponent(shareUrl)}`;
+                        }, 1200);
+                    } catch (err) {
+                        window.location.href = `fb-messenger://share/?link=${encodeURIComponent(shareUrl)}`;
+                    }
+                };
+
+                // Progress Bar Update
+                const progPct = Math.min((userData.referrals / REQUIRED_REFERRALS) * 100, 100);
+                document.getElementById('referral-progress-bar').style.width = `${progPct}%`;
+                document.getElementById('referral-count').innerText = userData.referrals;
+
+                // Unlock Phone Section
+                if (userData.referrals >= REQUIRED_REFERRALS) {
+                    rewardSection.classList.remove('hidden');
+                    
+                    const phoneForm = document.getElementById('phone-form-container');
+                    const pendingEl = document.getElementById('pending-status');
+                    const approvedEl = document.getElementById('approved-status');
+
+                    phoneForm.classList.add('hidden');
+                    pendingEl.classList.add('hidden');
+                    approvedEl.classList.add('hidden');
+
+                    if (userData.status === "none" || !userData.phone) {
+                        phoneForm.classList.remove('hidden');
+                    } else if (userData.status === "pending") {
+                        pendingEl.classList.remove('hidden');
+                    } else if (userData.status === "approved") {
+                        approvedEl.classList.remove('hidden');
+                    }
+                } else {
+                    rewardSection.classList.add('hidden');
+                }
+            } else {
+                shareSection.classList.add('hidden');
+                rewardSection.classList.add('hidden');
+            }
+        }
+
+        // Handle Phone Number Submission
+        document.getElementById('submit-phone-btn').addEventListener('click', async () => {
+            const phone = document.getElementById('phone-input').value.trim();
+            if (!/^01[3-9]\d{8}$/.test(phone)) {
+                showToast("সঠিক ১১ ডিজিটের মোবাইল নাম্বার দিন!", true);
+                return;
+            }
+
+            try {
+                document.getElementById('submit-phone-btn').innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+                await updateDoc(doc(db, "users", userIP), {
+                    phone: phone,
+                    status: "pending",
+                    timestamp: new Date().toISOString()
+                });
+                showToast("রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে!");
+            } catch (e) {
+                showToast("সার্ভার ত্রুটি, আবার চেষ্টা করুন", true);
+                document.getElementById('submit-phone-btn').innerHTML = 'সাবমিট করুন <i class="fas fa-paper-plane ml-2"></i>';
+            }
+        });
+
+        // Initialize App Execution
+        init();
+    </script>
+</body>
+</html>
